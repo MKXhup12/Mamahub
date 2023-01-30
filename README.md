@@ -2358,9 +2358,9 @@ local Combat = RenUi:AddTab("Combat")
 local Stats = RenUi:AddTab("Stats")
 local Teleport = RenUi:AddTab("Teleport")
 local Dungeon = RenUi:AddTab("Dungeon")
-local DevilFruit = RenUi:AddTab("Devil Fruit")
 local Shop = RenUi:AddTab("Shop")
 local Misc = RenUi:AddTab("Misc")
+local DevilFruit = RenUi:AddTab("Devil Fruit")
 --------------------------------------------------------------------
 Main:AddSeperator("Settings")
 
@@ -6407,6 +6407,188 @@ Main:AddToggle("Auto Godhuman หาของเอง ",_G.AutoGodhuman,functio
     _G.AutoGodhuman = value
 end)
 
+FruitList = {
+        "Bomb-Bomb",
+        "Spike-Spike",
+        "Chop-Chop",
+        "Spring-Spring",
+        "Kilo-Kilo",
+        "Spin-Spin",
+        "Bird: Falcon",
+        "Smoke-Smoke",
+        "Flame-Flame",
+        "Ice-Ice",
+        "Sand-Sand",
+        "Dark-Dark",
+        "Revive-Revive",
+        "Diamond-Diamond",
+        "Light-Light",
+        "Love-Love",
+        "Rubber-Rubber",
+        "Barrier-Barrier",
+        "Magma-Magma",
+        "Door-Door",
+        "Quake-Quake",
+        "Human-Human: Buddha",
+        "String-String",
+        "Bird-Bird: Phoenix",
+        "Rumble-Rumble",
+        "Paw-Paw",
+        "Gravity-Gravity",
+        "Dough-Dough",
+        "Venom-Venom",
+        "Shadow-Shadow",
+        "Control-Control",
+        "Soul-Soul",
+        "Dragon-Dragon"
+    }
+    
+    _G.SelectFruit = ""
+    DevilFruit:AddDropdown("Select Fruits Sniper",FruitList,function(value)
+        _G.SelectFruit = value
+    end)
+    
+    DevilFruit:AddToggle("Auto Buy Fruit Sniper",_G.AutoBuyFruitSniper,function(value)
+        _G.AutoBuyFruitSniper = value
+    end)
+    
+   
+    
+    DevilFruit:AddDropdown("Select Fruits Eat",FruitList,function(value)
+        _G.SelectFruitEat = value
+    end)
+    
+    DevilFruit:AddToggle("Auto Eat Fruit",_G.AutoEatFruit,function(value)
+        _G.AutoEatFruit = value
+    end)
+    
+    spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.AutoEatFruit then
+                    game:GetService("Players").LocalPlayer.Character:FindFirstChild(_G.SelectFruitEat).EatRemote:InvokeServer()
+                end
+            end
+        end)
+    end)
+    
+    DevilFruit:AddToggle("Auto Eat Fruit Hop",_G.AutoEatFruitHop,function(value)
+        _G.AutoEatFruitHop = value
+    end)
+    
+    spawn(function()
+        pcall(function()
+            while wait(.1) do wait(10)
+                if _G.AutoEatFruitHop and _G.SelectFruitEat ~= nil then
+                    if not game:GetService("Players").LocalPlayer.Character:FindFirstChild(_G.SelectFruitEat) or not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(_G.SelectFruitEat) then
+                        Hop()
+                    else
+                        game:GetService("Players").LocalPlayer.Character:FindFirstChild(_G.SelectFruitEat).EatRemote:InvokeServer()
+                    end
+                end
+            end
+        end)
+    end)
+    
+    spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.AutoBuyFruitSniper then
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits")
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("PurchaseRawFruit",_G.SelectFruit)
+                end 
+            end
+        end)
+    end)
+    
+    DevilFruit:AddToggle("Auto Random Fruit",_G.Random_Auto,function(value)
+        _G.Random_Auto = value
+    end)
+    
+    spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.Random_Auto then
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin","Buy")
+                end 
+            end
+        end)
+    end)
+    
+    DevilFruit:AddButton("Random Fruit",function()
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin","Buy")
+    end)
+    
+    
+    DevilFruit:AddToggle("Auto Drop Fruit",_G.DropFruit,function(value)
+        _G.DropFruit = value
+    end)
+        
+    spawn(function()
+        while wait() do
+            if _G.DropFruit then
+                pcall(function()
+                    for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+                        if string.find(v.Name, "Fruit") then
+                            EquipWeapon(v.Name)
+                            wait(.1)
+                            if game:GetService("Players").LocalPlayer.PlayerGui.Main.Dialogue.Visible == true then
+                                game:GetService("Players").LocalPlayer.PlayerGui.Main.Dialogue.Visible = false
+                            end
+                            EquipWeapon(v.Name)
+                            game:GetService("Players").LocalPlayer.Character:FindFirstChild(SelectFruit).EatRemote:InvokeServer("Drop")
+                        end
+                    end
+                for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
+                        if string.find(v.Name, "Fruit") then
+                            EquipWeapon(v.Name)
+                            wait(.1)
+                            if game:GetService("Players").LocalPlayer.PlayerGui.Main.Dialogue.Visible == true then
+                                game:GetService("Players").LocalPlayer.PlayerGui.Main.Dialogue.Visible = false
+                            end
+                            EquipWeapon(v.Name)
+                            game:GetService("Players").LocalPlayer.Character:FindFirstChild(SelectFruit).EatRemote:InvokeServer("Drop")
+                        end
+                    end
+                end)
+            end
+        end
+    end)
+    
+    DevilFruit:AddToggle("Auto Store Fruit",_G.AutoStoreFruit,function(value)
+        _G.AutoStoreFruit = value
+    end)
+    
+    spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.AutoStoreFruit then
+                    for i,v in pairs(FruitList) do
+                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit",v)
+                    end
+                end
+            end
+        end)
+    end)
+    
+    
+    DevilFruit:AddToggle("Grab Fruit",_G.BringFruit,function(value)
+        _G.BringFruit = value
+        pcall(function()
+            while _G.BringFruit do wait(.1)
+                for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+                    if v:IsA("Tool") then
+                        local OldCFrame = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame				
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Handle.CFrame * CFrame.new(0,0,8)
+                        v.Handle.CFrame = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+                        wait(.1)
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = OldCFrame
+                    end
+                end
+            end
+        end)
+    end)
+
 spawn(function()
     while task.wait() do
         pcall(function()
@@ -6444,3 +6626,4 @@ spawn(function()
         end)
     end
 end)
+
